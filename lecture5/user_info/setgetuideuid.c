@@ -9,7 +9,7 @@ int main(void){
 	euid = geteuid();
 	printf("[Init] UID = %d, EUID = %d\n", (int)uid, (int)euid);
 
-	seteuid(getuid);
+	seteuid(getuid());
 	int cur_euid = (int)geteuid();
 	printf("[seteuid(uid)] UID = %d, EUID=%d\n", (int)uid, (int)cur_euid);
 
