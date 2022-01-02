@@ -33,7 +33,8 @@ int main(int argc,char *argv[]){
     }
 
     int pageSize = getpagesize();
-    
+    printf("page size :%d\n", pageSize);
+
     //flag는 SHARED로 메모리와 파일을 매핑
     addr1 = mmap(NULL, pageSize, PROT_READ | PROT_WRITE, MAP_SHARED, fd, (off_t)0);
     CHECK_MMAP_SUCCESS(addr1);
@@ -47,13 +48,25 @@ int main(int argc,char *argv[]){
 
     printf("%s", addr1);
 
+    char message[15];
+    printf("[발신]");
+    scanf("%s", message);
+    
+    for(int i = 0; i < 15; i++){
+        if(message[i] == '\0') break;
+        addr1[i] = message[i];
+    }
+    msync(addr1, pageSize, MS_SYNC);
+ 
+    printf("result : %s\n", addr1);
+    /**
     //addr1은 메모리에 쓰면 매핑된 파일에도 써짐(SHARED)
     addr1[0] = '1'; printAddrs("After addr1[0]=1");
     //addr2는 메모리에 쓰면 파일에 써지는게 아닌 사본에 써짐(PRIVATE)
     addr2[0] = '2'; printAddrs("After addr2[0]=2");
     //addr1은 메모리에 써도, addr2는 이제 사본을 바라보고 있기에, 다른 값이 출력된다.
     addr1[0] = '3'; printAddrs("After addr1[0]=3");
-
+    **/
     execlp("cat", "cat", fileName, NULL);
 
     return 0;
